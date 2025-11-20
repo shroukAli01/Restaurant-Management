@@ -19,8 +19,19 @@ private:
 
 public:
 //Constructor 
-    Cook(int id = 0, char type = 'N', int speed = 0,
-        int bo = 0, int breakDur = 0);
+    
+    Cook(int id = 0, char type = 'N', int speed = 0, int bo = 0, int breakDur = 0)
+        {
+            ID = id;
+            Type = type;
+            Speed = speed;
+    
+            BO = bo;
+            BreakDuration = breakDur;
+            BreakRemaining = 0;
+            OrdersSinceBreak = 0;
+            Available = true;
+        }
 //setter
     void SetID(int id) { ID = id; }
 
@@ -42,6 +53,44 @@ public:
 
 
     bool IsAvailable() const { return Available; }
+
+// break operations
+
+    void StartBreak()
+    {
+        Available = false;
+        BreakRemaining = BreakDuration;
+    }
+
+    void UpdateBreak()
+    {
+        if (BreakRemaining > 0)
+        {
+            BreakRemaining--;
+            if (BreakRemaining == 0)
+                ResetBreak();
+        }
+    }
+
+    bool InBreak() const
+    {
+        return BreakRemaining > 0;
+    }
+
+    void ResetBreak()
+    {
+        BreakRemaining = 0;
+        OrdersSinceBreak = 0;
+        Available = true;
+    }
+
+    void OrderAssigned()
+    {
+        OrdersSinceBreak++;
+
+        if (OrdersSinceBreak >= BO) 
+            StartBreak();
+    }
 
     void SetAvailable(bool a)
     {
