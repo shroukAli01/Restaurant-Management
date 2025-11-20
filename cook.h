@@ -14,7 +14,6 @@ private:
     int BO;             
     int BreakDuration;  
     int BreakRemaining; 
-   
     int OrdersSinceBreak;
     bool Available;     
 
@@ -23,29 +22,32 @@ public:
     Cook(int id = 0, char type = 'N', int speed = 0,
         int bo = 0, int breakDur = 0);
 //setter
-    void SetID(int id);
-    void SetType(char type);
-    void SetSpeed(int s);
-    void SetBO(int bo);
-    void SetBreakDuration(int bd);
-    void SetAvailable(bool a);
+    void SetID(int id) { ID = id; }
 
-//gette
-    int  GetID() const;
-    char GetType() const;
-    int  GetSpeed() const;
-    int  GetBO() const;
-    int  GetBreakDuration() const;
-    int  GetBreakRemaining() const;
+    void SetType(char type) { Type = type; }
+
+    void SetSpeed(int s) { Speed = s; }
+
+    void SetBO(int bo) { BO = bo; }
+
+    void SetBreakDuration(int bd) { BreakDuration = bd; }
+
+//getter
+    int  GetID() const { return ID; }
+    char GetType() const { return Type; }
+    int  GetSpeed() const { return Speed; }
+    int  GetBO() const { return BO; }
+    int  GetBreakDuration() const { return BreakDuration; }
+    int  GetBreakRemaining() const { return BreakRemaining; }
 
 
+    bool IsAvailable() const { return Available; }
 
- //  Break operation
-   void StartBreak();        
-   void UpdateBreak();         // update remaining break time
-   bool InBreak() const;    
-   void ResetBreak();          // Reset after finishing break
-   
-   void OrderAssigned();    
+    void SetAvailable(bool a)
+    {
+        Available = a;
+    }
 
-   bool IsAvailable() const;
+ 
+
+
