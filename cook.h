@@ -1,38 +1,47 @@
 #pragma once
 #include <iostream>
 
-using name space std;
+using namespace std;
+
+class Order;
 
 
 class Cook
 {
 private:
-    int ID;             
+    int ID;
     char Type;   // (V/N/G)      
-    int Speed;          
+    int Speed;
 
-    int BO;             
-    int BreakDuration;  
-    int BreakRemaining; 
+    int BO;      //Break Order   
+    int BreakDuration;
+    int BreakRemaining;
     int OrdersSinceBreak;
-    bool Available;     
+    bool Available;
+
+    Order* CurrentOrder;
+    int RemainingTime;
 
 public:
-//Constructor 
-    
+    //Constructor 
+
     Cook(int id = 0, char type = 'N', int speed = 0, int bo = 0, int breakDur = 0)
-        {
-            ID = id;
-            Type = type;
-            Speed = speed;
-    
-            BO = bo;
-            BreakDuration = breakDur;
-            BreakRemaining = 0;
-            OrdersSinceBreak = 0;
-            Available = true;
-        }
-//setter
+    {
+        ID = id;
+        Type = type;
+        Speed = speed;
+
+        BO = bo;
+        BreakDuration = breakDur;
+        BreakRemaining = 0;
+        OrdersSinceBreak = 0;
+        Available = true;
+
+        CurrentOrder = nullptr;
+        RemainingTime = 0;
+    }
+
+    //setter
     void SetID(int id) { ID = id; }
 
     void SetType(char type) { Type = type; }
@@ -43,7 +52,9 @@ public:
 
     void SetBreakDuration(int bd) { BreakDuration = bd; }
 
-//getter
+    void SetAvailable(bool a) { Available = a; }
+
+    //getter
     int  GetID() const { return ID; }
     char GetType() const { return Type; }
     int  GetSpeed() const { return Speed; }
@@ -54,7 +65,40 @@ public:
 
     bool IsAvailable() const { return Available; }
 
-// break operations
+    Order* GetCurrentOrder() const { return CurrentOrder; }
+    int GetRemainingTime() const { return RemainingTime; }
+
+
+
+
+    void AssignOrder(Order* o, int orderSize)
+    {
+        CurrentOrder = o;
+        Available = false;
+
+        RemainingTime = (orderSize + Speed - 1) / Speed;
+    }
+
+    void UpdateCooking()
+    {
+        if (!Available && RemainingTime > 0)
+        {
+            RemainingTime--;
+
+            if (RemainingTime == 0)
+            {
+                CurrentOrder = nullptr;
+                Available = true;
+            }
+        }
+    }
+
+    bool IsBusy() const
+    {
+        return !Available;
+    }
+
+    // break operations
 
     void StartBreak()
     {
@@ -88,7 +132,7 @@ public:
     {
         OrdersSinceBreak++;
 
-        if (OrdersSinceBreak >= BO) 
+        if (OrdersSinceBreak >= BO)
             StartBreak();
     }
 
@@ -97,6 +141,5 @@ public:
         Available = a;
     }
 
- 
 
-
+};
